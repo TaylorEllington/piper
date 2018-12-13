@@ -1,0 +1,9 @@
+set(TARGET piper)
+
+set(TARGET_SOURCES
+    main.cpp
+)
+
+add_executable(${TARGET} ${TARGET_SOURCES})
+
+set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 14)
