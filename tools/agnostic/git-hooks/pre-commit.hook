@@ -1,0 +1,42 @@
+#!/bin/sh
+#
+# invoke clang format against codebase deltas just prior to commit
+#
+#
+
+# get the list of changed files
+LIST="$(git diff --cached --name-only)"
+
+# grab the path to where we expect clang-format to be
+if [ "$(uname)" == "Darwin" ]; then
+    PLATFORM_PATH= "/Tools/MacOS/"      
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+    PLATFORM_PATH= "/Tools/Linux/"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+    PLATFORM_PATH="/Tools/Windows/"
+elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW64_NT" ]; then
+    PLATFORM_PATH="/Tools/Windows/"
+fi
+
+
+
+
+REPO_TOP_LEVEL_DIR="$(git rev-parse --show-toplevel)"
+
+CLANG_PATH="clang-format.exe"
+# the -i flag inplace edits
+CLANG_FLAGS="-i -style=file"
+FINAL_EXE_PATH=" '$REPO_TOP_LEVEL_DIR$PLATFORM_PATH$CLANG_PATH' $CLANG_FLAGS "
+
+for FILE in $LIST
+do
+    if [[ $FILE == *.h ]] || [[ $FILE == *.cpp ]] ; then
+        eval $FINAL_EXE_PATH$FILE
+        eval git add $FILE
+    fi
+done
+
+ 
+
+
+
