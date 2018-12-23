@@ -5,8 +5,6 @@ set(TARGET_SOURCES
 )
 
 
-
-
 add_executable(${TARGET} ${TARGET_SOURCES})
 
 target_link_libraries(${TARGET}
@@ -15,3 +13,4 @@ target_link_libraries(${TARGET}
 
 set_target_properties(${TARGET} PROPERTIES CXX_STANDARD 14)
 
+install(TARGETS piper DESTINATION bin)
